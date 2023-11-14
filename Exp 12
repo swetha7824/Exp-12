@@ -1,0 +1,110 @@
+public class MaxFinder {
+
+    // Generic method to find the maximum value in an array
+    public static <T extends Comparable<T>> T findMax(T[] array) {
+        if (array == null || array.length == 0) {
+            return null; // Handle empty or null array
+        }
+
+        T max = array[0];
+        for (int i = 1; i < array.length; i++) {
+            if (array[i].compareTo(max) > 0) {
+                max = array[i];
+            }
+        }
+        return max;
+    }
+
+    public static void main(String[] args) {
+        // Example usage with different types
+        Integer[] intArray = {3, 7, 1, 9, 4};
+        Double[] doubleArray = {3.5, 1.2, 9.8, 2.4};
+        String[] stringArray = {"apple", "orange", "banana"};
+
+        // Find and print the maximum value for each type of array
+        System.out.println("Max Integer: " + findMax(intArray));
+        System.out.println("Max Double: " + findMax(doubleArray));
+        System.out.println("Max String: " + findMax(stringArray));
+    }
+}
+import java.util.Arrays;
+
+class GenericArrayOperations<T> {
+    private Object[] array;
+    private int size;
+
+    // Constructor
+    public GenericArrayOperations(int initialCapacity) {
+        this.array = new Object[initialCapacity];
+        this.size = 0;
+    }
+
+    // Add an element at the beginning
+    public void addElementAtBeginning(T element) {
+        ensureCapacity();
+        System.arraycopy(array, 0, array, 1, size);
+        array[0] = element;
+        size++;
+    }
+
+    // Add an element at the middle (index)
+    public void addElementAtMiddle(int index, T element) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index out of bounds");
+        }
+        ensureCapacity();
+        System.arraycopy(array, index, array, index + 1, size - index);
+        array[index] = element;
+        size++;
+    }
+
+    // Add an element at the end
+    public void addElementAtEnd(T element) {
+        ensureCapacity();
+        array[size++] = element;
+    }
+
+    // Delete an element from a given position
+    public void deleteElement(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index out of bounds");
+        }
+        System.arraycopy(array, index + 1, array, index, size - index - 1);
+        size--;
+    }
+
+    // Ensure capacity for adding elements
+    private void ensureCapacity() {
+        if (size == array.length) {
+            int newCapacity = array.length * 2;
+            array = Arrays.copyOf(array, newCapacity);
+        }
+    }
+
+    // Display the array
+    public void displayArray() {
+        System.out.println(Arrays.toString(Arrays.copyOf(array, size)));
+    }
+}
+
+public class ArrayOperationsExample {
+    public static void main(String[] args) {
+        GenericArrayOperations<Integer> arrayOps = new GenericArrayOperations<>(5);
+
+        // Add elements
+        arrayOps.addElementAtEnd(1);
+        arrayOps.addElementAtEnd(3);
+        arrayOps.addElementAtEnd(5);
+        arrayOps.displayArray();
+
+        arrayOps.addElementAtBeginning(0);
+        arrayOps.displayArray();
+
+        arrayOps.addElementAtMiddle(2, 2);
+        arrayOps.displayArray();
+
+        // Delete element
+        arrayOps.deleteElement(1);
+        arrayOps.displayArray();
+    }
+}
